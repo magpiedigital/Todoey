@@ -36,6 +36,24 @@ class CategoryTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if let item = categories?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(item)
+                }
+            } catch {
+                print("Error updating checkmark \(error)")
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Didselectrow
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
